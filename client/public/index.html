@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Real-Time Data Fetch</title>
+</head>
+
+<body>
+    <h1>Real-Time Data:</h1>
+    <div id="data"></div>
+    <input type="text" id="textInput" placeholder="Type here">
+    <script>
+        const dataElement = document.getElementById('data');
+        const eventSource = new EventSource('http://localhost:3000/events');
+        const textInput = document.getElementById('textInput');
+
+        eventSource.onmessage = (event) => {
+            const newData = event.data;
+            dataElement.innerHTML = newData;
+        };
+
+        textInput.addEventListener('input', (event) => {
+            console.log('sss')
+            const text = event.target.value;
+            // Send the typed text to the server (you can adapt this part to your needs).
+            fetch('http://localhost:3000/update', {
+                method: 'POST',
+                body: JSON.stringify({
+                    text
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        });
+    </script>
+</body>
+
+</html>
